@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday 🎂</title>
+
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #fff5fb;
+            overflow-x: hidden;
+        }
+
+        /* LOADING SCREEN */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(
+                135deg, #ff69b4, #9b5de5, #00d9ff, #ffd166
+            );
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        #loadingScreen.hide {
+            opacity: 0;
+            transform: scale(1.15);
+            pointer-events: none;
+        }
+
+        /* CAKE */
+        .cake {
+            position: relative;
+            width: 180px;
+            height: 140px;
+        }
+
+        .cake-layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 12px;
+        }
+
+        .bottom-layer {
+            bottom: 0;
+            width: 180px;
+            height: 45px;
+            background: #ff8fab;
+            box-shadow: 0 7px 0 #ff5d8f;
+        }
+
+        .middle-layer {
+            bottom: 38px;
+            width: 145px;
+            height: 40px;
+            background: #ffd166;
+            box-shadow: 0 7px 0 #e8ae2d;
+        }
+
+        .top-layer {
+            bottom: 72px;
+            width: 110px;
+            height: 35px;
+            background: #9b5de5;
+            box-shadow: 0 6px 0 #7541b8;
+        }
+
+        .cream {
+            position: absolute;
+            bottom: 67px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 13px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 103px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 38px;
+            background: #00d9ff;
+            border-radius: 5px;
+        }
+
+        .flame {
+            position: absolute;
+            top: -21px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 22px;
+            background: #ff9f1c;
+            border-radius: 50%;
+            animation: flame .5s infinite alternate;
+        }
+
+        @keyframes flame {
+            from {
+                transform: translateX(-50%) scale(1);
+            }
+            to {
+                transform: translateX(-50%) scale(1.2, 1.4);
+            }
+        }
+
+        .loading-text {
+            margin-top: 30px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: .6; }
+            50% { opacity: 1; }
+        }
+
+        /* LOADING CONFETTI */
+        .loading-confetti {
+            position: absolute;
+            width: 8px;
+            height: 13px;
+            border-radius: 2px;
+            animation: float 4s linear infinite;
+        }
+
+        .lc1 {
+            left: 10%;
+            top: 20%;
+            background: #ff006e;
+        }
+
+        .lc2 {
+            left: 20%;
+            top: 70%;
+            background: #ffd166;
+            animation-delay: 1s;
+        }
+
+        .lc3 {
+            left: 80%;
+            top: 25%;
+            background: #00f5d4;
+            animation-delay: .5s;
+        }
+
+        .lc4 {
+            left: 90%;
+            top: 65%;
+            background: #8338ec;
+            animation-delay: 1.5s;
+        }
+
+        .lc5 {
+            left: 70%;
+            top: 80%;
+            background: #ff9f1c;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(-10px) rotate(0);
+            }
+            50% {
+                transform: translateY(30px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(-10px) rotate(360deg);
+            }
+        }
+
+        /* MAIN PAGE */
+        #mainPage {
+            min-height: 100vh;
+            position: relative;
+            padding: 80px 20px;
+            background: linear-gradient(
+                135deg, #ff8fab, #c77dff, #90e0ef
+            );
+        }
+
+        /* BIRTHDAY CARD */
+        .birthday-card {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            padding: 45px 30px;
+            text-align: center;
+            background: rgba(255, 255, 255, .94);
+            border-radius: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .15);
+            position: relative;
+            z-index: 5;
+            animation: cardAppear 1s ease;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(.85) translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .cake-emoji {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: clamp(35px, 8vw, 58px);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            background: linear-gradient(
+                90deg, #ff4d8d, #9b5de5, #00b4d8
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* MAIN BUTTONS */
+        .button {
+            border: none;
+            padding: 14px 23px;
+            margin: 5px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-4px) scale(1.04);
+        }
+
+        .button:active {
+            transform: scale(.95);
+        }
+
+        .surprise-button {
+            color: white;
+            background: linear-gradient(90deg, #ff4d8d, #9b5de5);
+            box-shadow: 0 8px 20px rgba(155, 93, 229, .3);
+        }
+
+        .message-button {
+            color: #654900;
+            background: #ffd166;
+            box-shadow: 0 8px 20px rgba(255, 209, 102, .3);
+        }
+
+        /* SURPRISE */
+        #surprise {
+            display: none;
+            margin-top: 25px;
+            padding: 22px;
+            background: linear-gradient(135deg, #fff0f6, #f0e7ff);
+            border-radius: 22px;
+            color: #555;
+            line-height: 1.6;
+            animation: popIn .6s ease;
+        }
+
+        #surprise.show {
+            display: block;
+        }
+
+        #surprise h2 {
+            color: #9b5de5;
+            margin-bottom: 10px;
+        }
+
+        /* PERSONAL MESSAGE */
+        #customMessage {
+            display: none;
+            margin-top: 20px;
+            padding: 25px;
+            background: linear-gradient(
+                135deg, #fff8dc, #ffe5f1, #e5faff
+            );
+            border-radius: 25px;
+            border: 2px dashed #ff8fab;
+            animation: messageAppear .7s ease;
+        }
+
+        #customMessage.show {
+            display: block;
+        }
+
+        #customMessage h2 {
+            color: #ff4d8d;
+            margin-bottom: 12px;
+        }
+
+        #messageText {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(.7);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: scale(.7) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* PHOTO SECTION */
+        .photo-section {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto 60px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .section-title {
+            text-align: center;
+            color: white;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+        }
+
+        .photo-window {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 25px;
+            padding: 15px 0;
+        }
+
+        .photo-track {
+            display: flex;
+            gap: 18px;
+            width: max-content;
+            animation: photoloop 18s linear infinite;
+        }
+
+        .photo-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes photoloop {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .photo-card {
+            width: 240px;
+            aspect-ratio: 4 / 3;
+            flex-shrink: 0;
+            border-radius: 18px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .18);
+            cursor: pointer;
+            transition: transform .3s ease;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* HIDDEN AUDIO */
+        #birthdayMusic {
+            display: none;
+        }
+
+        /* BALLOONS */
+        .balloon {
+            position: absolute;
+            width: 55px;
+            height: 70px;
+            border-radius: 50%;
+            z-index: 2;
+            animation: balloonFloat 4s ease-in-out infinite;
+        }
+
+        .balloon::after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 90px;
+            left: 50%;
+            top: 65px;
+            background: rgba(0, 0, 0, .2);
+        }
+
+        .pink-balloon {
+            left: 4%;
+            top: 20%;
+            background: #ff4d8d;
+        }
+
+        .yellow-balloon {
+            right: 4%;
+            top: 45%;
+            background: #ffd166;
+            animation-delay: 1s;
+        }
+
+        .blue-balloon {
+            left: 8%;
+            bottom: 8%;
+            width: 42px;
+            height: 55px;
+            background: #00d9ff;
+            animation-delay: 2s;
+        }
+
+        @keyframes balloonFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+            50% {
+                transform: translateY(-18px) rotate(3deg);
+            }
+        }
+
+        /* FULLSCREEN PHOTO VIEWER */
+        #photoViewer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99998;
+            background: rgba(0, 0, 0, .85);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #photoViewer.show {
+            display: flex;
+        }
+
+        #photoViewer img {
+            max-width: 90vw;
+            max-height: 85vh;
+            aspect-ratio: 4 / 3;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+            animation: viewerAppear .3s ease;
+        }
+
+        #closeViewer {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+        }
+
+        @keyframes viewerAppear {
+            from {
+                opacity: 0;
+                transform: scale(.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* PARTY CONFETTI */
+        .party-confetti {
+            position: fixed;
+            top: -20px;
+            width: 10px;
+            height: 16px;
+            z-index: 99999;
+            pointer-events: none;
+            animation: partyFall 2.5s linear forwards;
+        }
+
+        @keyframes partyFall {
+            0% {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+            #mainPage {
+                padding: 50px 12px;
+            }
+
+            .birthday-card {
+                padding: 35px 18px;
+                border-radius: 28px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .photo-card {
+                width: 190px;
+            }
+
+            .photo-track {
+                gap: 12px;
+            }
+
+            .balloon {
+                transform: scale(.7);
+            }
+
+            .pink-balloon {
+                left: -6%;
+            }
+
+            .yellow-balloon {
+                right: -6%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .photo-track {
+                animation-duration: 36s;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOADING SCREEN -->
+    <div id="loadingScreen">
+        <div class="loading-confetti lc1"></div>
+        <div class="loading-confetti lc2"></div>
+        <div class="loading-confetti lc3"></div>
+        <div class="loading-confetti lc4"></div>
+        <div class="loading-confetti lc5"></div>
+
+        <div class="cake">
+            <div class="cake-layer bottom-layer"></div>
+            <div class="cake-layer middle-layer"></div>
+            <div class="cake-layer top-layer"></div>
+            <div class="cream"></div>
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+        </div>
+
+        <div class="loading-text">
+            A Special Day Is Coming...
+        </div>
+    </div>
+
+    <!-- MAIN WEBSITE -->
+    <main id="mainPage">
+
+        <!-- BALLOONS -->
+        <div class="balloon pink-balloon"></div>
+        <div class="balloon yellow-balloon"></div>
+        <div class="balloon blue-balloon"></div>
+
+        <!-- BIRTHDAY CARD -->
+        <section class="birthday-card">
+
+            <div class="cake-emoji">🎂</div>
+
+            <h1>Happy Birthday!<br>NAUMI</h1>
+
+            <p class="subtitle">
+                Happy 18th pookie.
+                Congrats, kamu udah bisa lewatin semua
+                hal yang bikin kamu strees dan badmood itu,
+                U ARE THE BEST EVER!!!
+            </p>
+
+            <!-- TOMBOL SURPRISE -->
+            <button id="surpriseBtn"
+                    class="button surprise-button">
+                First For You
+            </button>
+
+            <!-- TOMBOL PESAN -->
+            <button id="messageBtn"
+                    class="button message-button">
+                Dear Nau Gacor
+            </button>
+
+            <!-- SURPRISE -->
+            <div id="surprise">
+                <h2>Short Massage</h2>
+                <p>
+                    I think this is all I can give you now,
+                    opefully in the future I can give you a more interesting gift.
+                    semoga dimasa depan juga kamu bakal dapet hal-hal yang bisa
+                    buat kamu lebih bahagia, apapun itu.
+                    Btw, u can ask for one more gift (if you want)
+                </p>
+            </div>
+
+            <!-- PERSONAL MESSAGE -->
+            <div id="customMessage">
+                <h2>It's For You</h2>
+                <p id="messageText"></p>
+            </div>
+
+        </section>
+
+        <!-- PHOTO SECTION -->
+        <section class="photo-section">
+
+            <h2 class="section-title">
+                MY FINESHYT GUA!!
+            </h2>
+
+            <div class="photo-window">
+                <div class="photo-track" id="photoTrack">
+
+                    <!-- FOTO 1-18 -->
+                    <div class="photo-card"><img src="foto 1.jpg" alt="Foto 1"></div>
+                    <div class="photo-card"><img src="foto 2.jpg" alt="Foto 2"></div>
+                    <div class="photo-card"><img src="foto 3.jpg" alt="Foto 3"></div>
+                    <div class="photo-card"><img src="foto 4.jpg" alt="Foto 4"></div>
+                    <div class="photo-card"><img src="foto 5.jpg" alt="Foto 5"></div>
+                    <div class="photo-card"><img src="foto 6.jpg" alt="Foto 6"></div>
+                    <div class="photo-card"><img src="foto 7.jpg" alt="Foto 7"></div>
+                    <div class="photo-card"><img src="foto 8.jpg" alt="Foto 8"></div>
+                    <div class="photo-card"><img src="foto 9.jpg" alt="Foto 9"></div>
+                    <div class="photo-card"><img src="foto 10.jpg" alt="Foto 10"></div>
+                    <div class="photo-card"><img src="foto 11.jpg" alt="Foto 11"></div>
+                    <div class="photo-card"><img src="foto 12.jpg" alt="Foto 12"></div>
+                    <div class="photo-card"><img src="foto 13.jpg" alt="Foto 13"></div>
+                    <div class="photo-card"><img src="foto 14.jpg" alt="Foto 14"></div>
+                    <div class="photo-card"><img src="foto 15.jpg" alt="Foto 15"></div>
+                    <div class="photo-card"><img src="foto 16.jpg" alt="Foto 16"></div>
+                    <div class="photo-card"><img src="foto 17.jpg" alt="Foto 17"></div>
+                    <div class="photo-card"><img src="foto 18.jpg" alt="Foto 18"></div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FULLSCREEN PHOTO VIEWER -->
+    <div id="photoViewer">
+        <span id="closeViewer" role="button"
+              aria-label="Tutup foto">&times;</span>
+        <img id="viewerImage" src="" alt="Foto">
+    </div>
+
+    <!-- BACKGROUND MUSIC -->
+    <audio
+        id="birthdayMusic"
+        src="Her-Bhirtday-Song.mp3"
+        loop
+        preload="auto">
+    </audio>
+
+    <script>
+        /* =========================================
+           PERSONAL BIRTHDAY MESSAGE
+        ========================================= */
+
+        const birthdayMessage = `
+
+YAYYY, you getting older now.
+tengkyu very much ya sebelumnya kamu
+mau nemenin aku selama 2 tahun ini....
+ya walaupun sekarang udah ga sedeket kemaren.
+hadiah ini mungkin adalah salah satu bukti
+kalo aku masih suka sama kamu,
+walaupun ini web masih dibantu sama AI, dan tumbler
+itu aku direkomendasiin sama misel (imao).
+disini aku mau banyak2 berterima kasih sama kamu yang
+bisa ngerubah aku sejauh ini, bahkan aku bisa bikin web ini
+sampe aku publish itu juga gara2 momen ini.
+jangan takut aku kecintaan sama elu ya anjir, aku ga akan
+segitunya ngejar kamu sebelum aku kelar sama urusanku sendirI.
+paling cuma kangen kadang-kadang (hehe), elu juga kejar apa
+yang elu suka, aku pasti dukung kok, dan aku juga bisa bantu kalo
+kamu mau, nanti aku ajarin sebisaku (fr fr fr).
+apapun yang tejadi, elu adalah fineshyt guwech.
+njir malah curhat, intinya gitu aja....
+Selamat Ulang tahun yaa... Pretty.
+Enjoy ya sama kehidupan baru kamu,
+semoga sampai ulang tahun berikutnya aku masih
+bisa lihat di story ig kamu kalo kamu
+bakalan terus bahagia menjalani kehidupan
+sebagai WNI ini, yang presidennya PRABOWO,
+5555555. makasih ya udah pernah jadi bagian dari cerita
+kehidupanku, i hope we can be together again in our best version :)
+(semoga kamu suka ya sama hadiahnya)
+"I LOVE YOU"
+
+`;
+
+        /* =========================================
+           LOADING SCREEN: 3 SECONDS
+        ========================================= */
+
+        const loadingScreen =
+            document.getElementById("loadingScreen");
+
+        setTimeout(() => {
+            loadingScreen.classList.add("hide");
+        }, 3000);
+
+        /* =========================================
+           AUTOMATIC MUSIC
+        ========================================= */
+
+        const music =
+            document.getElementById("birthdayMusic");
+
+        music.volume = 0.7;
+
+        async function playBirthdayMusic() {
+            if (!music.paused) return;
+
+            try {
+                await music.play();
+
+                // Hapus fallback setelah musik mulai
+                document.removeEventListener(
+                    "pointerdown", playBirthdayMusic
+                );
+                document.removeEventListener(
+                    "keydown", playBirthdayMusic
+                );
+            } catch (error) {
+                // Autoplay dengan suara mungkin diblokir browser.
+                // Coba kembali ketika pengguna berinteraksi.
+            }
+        }
+
+        // Mencoba memutar lagu saat halaman dibuka
+        document.addEventListener(
+            "DOMContentLoaded",
+            playBirthdayMusic,
+            { once: true }
+        );
+
+        // Fallback tanpa tombol musik khusus
+        document.addEventListener(
+            "pointerdown",
+            playBirthdayMusic
+        );
+
+        document.addEventListener(
+            "keydown",
+            playBirthdayMusic
+        );
+
+        /* =========================================
+           SURPRISE BUTTON
+        ========================================= */
+
+        const surpriseBtn =
+            document.getElementById("surpriseBtn");
+
+        const surprise =
+            document.getElementById("surprise");
+
+        surpriseBtn.addEventListener("click", () => {
+            surprise.classList.add("show");
+            createConfetti();
+        });
+
+        /* =========================================
+           PERSONAL MESSAGE BUTTON
+        ========================================= */
+
+        const messageBtn =
+            document.getElementById("messageBtn");
+
+        const customMessage =
+            document.getElementById("customMessage");
+
+        const messageText =
+            document.getElementById("messageText");
+
+        messageBtn.addEventListener("click", () => {
+            messageText.textContent = birthdayMessage;
+            customMessage.classList.add("show");
+
+            createConfetti();
+
+            setTimeout(() => {
+                customMessage.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }, 200);
+        });
+
+        /* =========================================
+           INFINITE PHOTO LOOP
+           Duplicate 18 photos automatically
+        ========================================= */
+
+        const photoTrack =
+            document.getElementById("photoTrack");
+
+        const originalPhotos =
+            Array.from(photoTrack.children);
+
+        originalPhotos.forEach((photo) => {
+            const clone = photo.cloneNode(true);
+            clone.setAttribute("aria-hidden", "true");
+            photoTrack.appendChild(clone);
+        });
+
+        /* =========================================
+           FULLSCREEN PHOTO VIEWER
+        ========================================= */
+
+        const photoViewer =
+            document.getElementById("photoViewer");
+
+        const viewerImage =
+            document.getElementById("viewerImage");
+
+        const closeViewer =
+            document.getElementById("closeViewer");
+
+        photoTrack.addEventListener("click", (event) => {
+            const photo = event.target.closest(".photo-card");
+
+            if (!photo) return;
+
+            const img = photo.querySelector("img");
+
+            viewerImage.src = img.src;
+            viewerImage.alt = img.alt;
+            photoViewer.classList.add("show");
+        });
+
+        function hidePhotoViewer() {
+            photoViewer.classList.remove("show");
+        }
+
+        closeViewer.addEventListener("click", hidePhotoViewer);
+
+        photoViewer.addEventListener("click", (event) => {
+            if (event.target === photoViewer) {
+                hidePhotoViewer();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                hidePhotoViewer();
+            }
+        });
+
+        /* =========================================
+           CONFETTI
+        ========================================= */
+
+        function createConfetti() {
+            const colors = [
+                "#ff4d8d",
+                "#9b5de5",
+                "#ffd166",
+                "#00d9ff",
+                "#ff9f1c"
+            ];
+
+            for (let i = 0; i < 70; i++) {
+                const confetti = document.createElement("div");
+
+                confetti.classList.add("party-confetti");
+
+                confetti.style.background =
+                    colors[Math.floor(Math.random() * colors.length)];
+
+                confetti.style.left =
+                    Math.random() * 100 + "vw";
+
+                const size = Math.random() * 7 + 6;
+
+                confetti.style.width = size + "px";
+                confetti.style.height = size * 1.5 + "px";
+
+                confetti.style.animationDuration =
+                    Math.random() * 1.5 + 2 + "s";
+
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+    </script>
+
+</body>
+</html>
